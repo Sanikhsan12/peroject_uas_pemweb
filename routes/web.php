@@ -18,4 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware('auth');
 
-Route::get('/login', LoginComponent::class)->name('login');
+Route::get('/login', function(){
+    return view('livewire.login-component');
+});

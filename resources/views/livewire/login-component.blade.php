@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Login - Library Management System</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        @livewireStyles
     </head>
 
     <body class="bg-gray-100 flex items-center justify-center h-screen">
@@ -17,40 +18,44 @@
                 />
                 <h2 class="text-2xl font-bold text-gray-800">Login Dulu Cuy</h2>
             </div>
-            <form>
+            <form wire:submit.prevent="proses">
                 <div class="mb-6">
                     <input
                         type="text"
-                        wiremodel="email"
+                        wire:model="email"
                         id="email"
                         placeholder="Email Address"
                         class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        @error('email') class="border-red-500" @enderror
                     />
+                    @error('email') 
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="mb-6">
                     <input
                         type="password"
-                        wiremodel="password"
+                        wire:model="password"
                         id="password"
                         placeholder="Password"
                         class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        @error('password') class="border-red-500" @enderror
                     />
+                    @error('password')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <button
                     type="submit"
                     class="w-full bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    wire.click="proses"
                 >
                     Login
                 </button>
             </form>
             <div class="text-center mt-6">
-                <a href="#" class="text-blue-500 hover:underline"
-                    >Forgot password?</a
-                >
+                <a href="#" class="text-blue-500 hover:underline">
+                    Forgot password?
+                </a>
             </div>
         </div>
+        @livewireScripts
     </body>
 </html>
