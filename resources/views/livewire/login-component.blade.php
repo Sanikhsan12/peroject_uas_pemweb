@@ -11,29 +11,31 @@
         <div class="max-w-sm w-full p-8 bg-white rounded-lg shadow-lg">
             <div class="text-center mb-8">
                 <img
-                    src="library-logo.png"
+                    src="{{ asset('assets/login.png') }}"
                     alt="Library Logo"
                     class="w-24 h-24 mx-auto mb-4 object-contain"
                 />
-                <h2 class="text-2xl font-bold text-gray-800">Library Login</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Login Dulu Cuy</h2>
             </div>
             <form>
                 <div class="mb-6">
                     <input
-                        type="email"
+                        type="text"
+                        wiremodel="email"
                         id="email"
                         placeholder="Email Address"
-                        required
                         class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        @error('email') class="border-red-500" @enderror
                     />
                 </div>
                 <div class="mb-6">
                     <input
                         type="password"
+                        wiremodel="password"
                         id="password"
                         placeholder="Password"
-                        required
                         class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        @error('password') class="border-red-500" @enderror
                     />
                 </div>
                 <button
