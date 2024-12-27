@@ -11,10 +11,10 @@
     <!-- bootstraps icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-<body class="bg-blue-800">
+<body class="bg-[url('{{ asset('asset/login_page.jpg') }}')] bg-no-repeat bg-cover">
     <div class="min-h-screen flex items-center justify-center">
-        <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
-            <h2 class="text-2xl font-bold text-center">Login to Your Account</h2>
+        <div class="max-w-md w-full space-y-8 p-8 bg-orange-950 rounded-lg shadow-lg bg-opacity-65">
+            <h2 class="text-2xl font-bold text-center text-white">Login to Your Account</h2>
             
             <!-- Error Messages -->
             @if ($errors->any())
@@ -33,7 +33,7 @@
                 <!-- Email -->
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
-                        <label for="email" class="sr-only">Email address</label>
+                        <label for="email" class="sr-only text-white">Email address</label>
                         <input id="email" name="email" type="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email Address" value="{{ old('email') }}">
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <!-- Password -->
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
-                        <label for="password" class="sr-only">Password</label>
+                        <label for="password" class="sr-only text-white">Password</label>
                         <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
                     </div>
                 </div>
@@ -49,12 +49,12 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <input id="remember_me" name="remember" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                        <label for="remember_me" class="ml-2 block text-sm text-gray-900">
+                        <label for="remember_me" class="ml-2 block text-sm text-white">
                             Remember me
                         </label>
                     </div>
                     <div class="text-sm">
-                        <a href="{{ route('forgot-pass') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                        <a href="{{ route('forgot-pass') }}" class="font-medium text-white hover:text-white">
                             Forgot your password?
                         </a>
                     </div>
@@ -67,8 +67,8 @@
                 </div>
             </form>
 
-            <div class="flex items-center justify-between mt-4">
-                <span class="text-gray-500">or</span>
+            <div class="flex items-center justify-center mt-4">
+                <span class="text-white font-semibold">or</span>
             </div>
 
             <!-- Google Login -->
@@ -80,8 +80,8 @@
             </div>
 
             <div class="mt-4 text-center">
-                <span class="text-sm text-gray-500">
-                    Don't have an account? <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">Sign up</a>
+                <span class="text-sm text-white font-semibold">
+                    Don't have an account? <a href="{{ route('register') }}" class="font-medium text-white hover:text-orange-600">Sign up</a>
                 </span>
             </div>
         </div>
