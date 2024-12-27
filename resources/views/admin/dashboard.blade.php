@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <h1>ini dashboard admin</h1>
 </body>
 </html>
