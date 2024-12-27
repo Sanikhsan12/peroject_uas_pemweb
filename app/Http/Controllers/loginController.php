@@ -35,14 +35,15 @@ class loginController extends Controller
             $user = User::create([
                 'name' => $googleUser->getName(),
                 'email' => $googleUser->getEmail(),
-                'password' => Hash::make('password')
+                'password' => Hash::make('password'),
+                'role' => 'user'
             ]); 
             Auth::login($user);
         }
 
-        if($user == 'admin'){
+        if($user->role == 'admin'){
             return redirect()->route('admin.dashboard');
-        }else{
+        }elseif($user->role == 'user'){
             return redirect()->route('user.dashboard');
         }
     }
@@ -58,9 +59,9 @@ class loginController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
-            if($user == 'admin'){
+            if($user->role === 'admin'){
                 return redirect()->route('admin.dashboard');
-            }else{
+            }elseif ($user->role === 'user') {
                 return redirect()->route('user.dashboard');
             }
         }
