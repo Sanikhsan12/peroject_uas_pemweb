@@ -52,7 +52,7 @@ class loginController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:8'
+            'password' => 'required|min:6'
         ]);
 
         $user = User::where('email', $request->email)->first();
