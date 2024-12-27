@@ -14,6 +14,5 @@ dengan tema web reservasi buku perpustakaan
 
 framework yang digunakan:
 
--   php laravel livewire
+-   php laravel livewire,breeze,dompdf,scialite
 -   tailwind & bootstraps
--   MANTAP
