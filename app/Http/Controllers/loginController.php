@@ -25,26 +25,32 @@ class loginController extends Controller
 
     public function handleGoogleCallback()
     {
-        $googleUser = Socialite::driver('google')->user();
+        try {
+            $googleUser = Socialite::driver('google')->user();
 
-        $user = User::where('email', $googleUser->getEmail())->first();
+            $user = User::where('email', $googleUser->getEmail())->first();
 
-        if($user){
-            Auth::login($user);
-        }else{
-            $user = User::create([
-                'name' => $googleUser->getName(),
-                'email' => $googleUser->getEmail(),
-                'password' => Hash::make('password'),
-                'role' => 'user'
-            ]); 
-            Auth::login($user);
-        }
+            if($user){
+                Auth::login($user);
+            }else{
+                $user = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'password' => Hash::make('password'),
+                    'role' => 'user',
+                ]); 
+                Auth::login($user);
+            }
 
-        if($user->role == 'admin'){
-            return redirect()->route('admin.dashboard');
-        }elseif($user->role == 'user'){
-            return redirect()->route('user.dashboard');
+            if($user->role == 'admin'){
+                return redirect()->route('admin.dashboard');
+            }elseif($user->role == 'user'){
+                return redirect()->route('user.dashboard');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Google login error: ' . $e->getMessage());
+            return redirect()->route('login')
+                ->withErrors(['error' => 'Unable to login with Google. Please try again.']);
         }
     }
 

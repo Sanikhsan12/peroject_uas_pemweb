@@ -27,7 +27,7 @@ Route::get('/', function () {
 Route::get('/login', [loginController::class, 'indexLogin'])->name('login');
 Route::get('/login/forgot-password', [loginController::class,'indexForgotPass'])->name('forgot-pass');
 Route::get('/login/google', [loginController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('/login/google/callback', [loginController::class, 'handleGoogleCallback']);
+Route::get('/callback', [loginController::class, 'handleGoogleCallback']);
 
 Route::post('/login', [loginController::class, 'login'])->name('login');
 Route::middleware(['auth','role:admin'])->group(function(){
