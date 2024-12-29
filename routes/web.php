@@ -44,3 +44,8 @@ Route::post('/register', [registerController::class, 'storeData'])->name('regist
 // Routing untuk forgot password
 Route::get('/forgot-password', [loginController::class,'indexForgotPass'])->name('forgot-pass');
 Route::post('/forgot-password', [loginController::class,'forgotPassword'])->name('forgot-pass.send');
+
+// Routing untuk reset password
+Route::get('/konfirmasi-reset', [loginController::class,'indexKonfirmasiReset'])->name('konfirmasi.reset');
+Route::get('/reset-password/{token}', [loginController::class,'indexResetPass'])->name('password.reset');
+Route::post('/reset-password', [loginController::class,'resetPassword'])->name('password.update');
