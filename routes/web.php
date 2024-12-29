@@ -25,7 +25,7 @@ Route::get('/', function () {
 
 // Routing untuk login
 Route::get('/login', [loginController::class, 'indexLogin'])->name('login');
-Route::get('/login/forgot-password', [loginController::class,'indexForgotPass'])->name('forgot-pass');
+
 Route::get('/login/google', [loginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('/callback', [loginController::class, 'handleGoogleCallback']);
 
@@ -39,3 +39,8 @@ Route::middleware(['auth','role:user'])->group(function(){
 
 // Routing untuk register
 Route::get('/register', [registerController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [registerController::class, 'storeData'])->name('register.store');
+
+// Routing untuk forgot password
+Route::get('/forgot-password', [loginController::class,'indexForgotPass'])->name('forgot-pass');
+Route::post('/forgot-password', [loginController::class,'forgotPassword'])->name('forgot-pass.send');

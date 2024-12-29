@@ -27,7 +27,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('register') }}" method="POST" class="mt-8 space-y-6">
+            <form action="{{ route('register.store') }}" method="POST" class="mt-8 space-y-6">
                 @csrf
 
                 <!-- Name -->
