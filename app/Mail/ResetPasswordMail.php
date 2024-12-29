@@ -25,23 +25,13 @@ class ResetPasswordMail extends Mailable
         $this->email = $email;
     }
 
-    public function build()
-    {
-        return $this->subject('Reset Password Notification')
-                    ->view('auth.reset-password')
-                    ->with([
-                        'token' => $this->token,
-                        'email' => $this->email
-                    ]);
-    }
-
     /**
      * Get the message envelope.
      */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Password Mail',
+            subject: 'Reset Password Notification',
         );
     }
 
@@ -51,7 +41,11 @@ class ResetPasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'auth.konfirmasi-reset',
+            with: [
+                'token' => $this->token,
+                'email' => $this->email
+            ]
         );
     }
 

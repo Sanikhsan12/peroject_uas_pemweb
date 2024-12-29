@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use App\Models\passwordReset;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ResetPasswordMail;
 
 class loginController extends Controller
 {
+    // INDEXING Halaman
     public function indexLogin()
     {
         return view('auth.login');
@@ -18,6 +24,21 @@ class loginController extends Controller
     {
         return view('auth.forgot-pass');
     }
+
+    public function indexResetPass(Request $request)
+    {
+        return view('auth.reset-pass',[
+            'token' => $request->token,
+            'email' => $request->email
+        ]);
+    }
+
+    public function indexKonfirmasiReset()
+    {
+        return view('auth.konfirmasi-reset');
+    }
+
+    // LOGIN DENGAN GOOGLE
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
@@ -54,6 +75,8 @@ class loginController extends Controller
         }
     }
 
+
+    // LOGIN DENGAN EMAIL DAN PASSWORD
     public function login(Request $request)
     {
         $request->validate([
@@ -72,6 +95,75 @@ class loginController extends Controller
             }
         }
 
-        return back()->withErrors('email', 'Email or password is incorrect');
+        return back()->withErrors(['email' => 'Email atau Password salah']);
+    }
+
+    // forgot password
+    public function forgotPassword(Request $request)
+    {
+        // validasi dari tabel users
+        $request->validate([
+            'email' => 'required|email|exists:users,email'
+        ],
+        [
+            'email.exists' => 'Email not found'
+        ]);
+
+        $email = $request->email;
+        $token = str::random(64);
+
+        passwordReset::where('email', $email)->delete();
+        
+        // simpan token ke database
+        passwordReset::create([
+            'email' => $email,
+            'token' => $token,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        // kirim email
+        try{
+            Mail::to($email)->send(new ResetPasswordMail($token, $email));
+
+            return back()->with('message', 'Check your email to reset password');
+        } catch (\Exception $e) {
+            \Log::error('Mail error: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Unable to send email. Please try again.']);
+        }
+    }
+
+    // reset password
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+    
+        $passwordReset = passwordReset::where([
+            ['token', $request->token],
+            ['email', $request->email],
+        ])->first();
+    
+        if (!$passwordReset) {
+            return back()->withErrors(['error' => 'Invalid token!']);
+        }
+    
+        $user = User::where('email', $request->email)->first();
+    
+        if (!$user) {
+            return back()->withErrors(['error' => 'User not found']);
+        }
+    
+        // Update password
+        $user->password = Hash::make($request->password);
+        $user->save();
+    
+        // Delete the token
+        passwordReset::where('email', $request->email)->delete();
+    
+        return redirect()->route('login')->with('status', 'Password has been reset!');
     }
 }
