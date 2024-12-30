@@ -21,5 +21,5 @@ fitur tambahan:
 
 -   Login Dengan Google Menggunakan Socialite
 -   Dark Mode (Menggunakan Tailwind CSS)
--   External Api (World Time)
+-   External Api (Time Zone DB)
 -   Export PDF Menggunakan dompdf
