@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -188,4 +188,5 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ])->toArray(),
 
+    'timezone_db_api_key' => env('TIMEZONE_DB_API_KEY'),
 ];
