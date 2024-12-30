@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\adminController;
@@ -38,6 +37,8 @@ Route::middleware(['auth','role:user'])->group(function(){
     Route::get('/search', [userController::class, 'search'])->name('search');
     Route::get('/history', [userController::class, 'history'])->name('history');
     Route::get('/book/{id}', [userController::class, 'bookDetails'])->name('book.details');
+    Route::post('/borrow/{id}', [userController::class,'borrowBook'])->name('book.borrow');
+    Route::post('/export-pdf',[userController::class,'exportPDF'])->name('export.pdf');
     Route::post('logout',[loginController::class,'logout'])->name('logout');
 });
 

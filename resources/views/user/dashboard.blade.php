@@ -5,11 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>User dashboard</title>
-
+    <!-- menyintukan api key dari env -->
+    <script>
+        const TIMEZONE_DB_API_KEY = "{{ config('app.timezone_db_api_key') }}";
+    </script>
     <!-- CDN Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- import Tailwind CSS Module -->
+    <style>
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+    </style>
+    <script>
+    tailwind.config = {
+        darkMode: 'class'
+    }
+    </script>
 </head>
-<body class="bg-gray-100">
+<body class="dark:bg-gray-900 dark:text-white">
     <!-- navbar -->
     <nav class="flex bg-orange-950 w-full h-16 justify-between items-center border-b-4 border-black mb-4">
         <div class="flex items-center px-4">
@@ -25,11 +39,11 @@
 
     <!-- side bar -->
     <div class="flex">
-        <aside id="sidebar" class="bg-orange-950 h-55 text-white transition-transform duration-300 -translate-x-full">
+        <aside id="sidebar" class="bg-orange-950 max-h-50 text-white transition-transform duration-300 -translate-x-full">
             <div class="p-4">
                 <ul class="space-y-2">
                     <li>
-                        <span id="darkModeToogle" class="block p-2 text-white text-center hover:text-orange-700">Lightning Mode</span>
+                        <span id="darkModeToogle" class="block p-2 text-white text-center hover:text-orange-700">Mode</span>
                     </li>
                     <li>
                         <a href="{{ route('user.dashboard') }}" id="menuHome" class="block p-2 text-white text-center hover:text-orange-700">Home</a>
@@ -53,18 +67,26 @@
         </aside>
 
         <!-- main content -->
-        <main class="flex-1 p-6">
+        <main class="flex-1 p-6 mt-20">
             <!-- homecontent -->
             <div id="homeContent" class="content-section">
-                <h1 class="text-4xl font-bold text-center mt-20">
+                <h1 class="text-4xl font-bold text-center items-center justify-center mt-20">
                     SELAMAT DATANG DI APLIKASI PERPUSTAKAAN
                 </h1>
+                <div id="world-time" class="flex text-center items-center justify-center ">
+                    <h2 id="time" class="text-center mt-20 font-bold text-6xl">Loading..</h2>
+                </div>
             </div>
 
             <!-- search content -->
             <div id="searchContent" class="content-section hidden">
                 <div class="max-w-4xl mx-auto">
                     <h2 class="text-2xl font-semibold mb-4">Cari Buku</h2>
+                    <form action="{{ route('export.pdf') }}" method="post" class="flex">
+                        @csrf
+                        <p class="text-black inline">Export Semua Data Buku Ke PDF</p>
+                        <button class="text-white rounded-lg bg-orange-950 p-2 mb-4 block ml-4">Export To Pdf</button>
+                    </form>
                     <div class="flex mb-6">
                         <input type="text" id="searchInput" class="flex-1 p-2 border rounded-l-lg" placeholder="Cari Buku">
                         <button id="searchButton" class="bg-[#593C2B] text-white p-2 rounded-r-lg">

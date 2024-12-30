@@ -10,8 +10,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Dark Mode Toggle
     const darkModeBtn = document.getElementById("darkModeToogle");
     darkModeBtn.addEventListener("click", function () {
-        document.body.classList.toggle("dark:bg-gray-800");
+        document.body.classList.toggle("dark");
+        localStorage.theme = document.documentElement.classList.contains("dark")
+            ? "dark"
+            : "light";
     });
+
+    // Check initial theme
+    if (localStorage.theme === "dark") {
+        document.documentElement.classList.add("dark");
+    }
 
     // Navigation Management
     const sections = {
@@ -210,32 +218,39 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         return items
-            .map(
-                (item) => `
-                <div class="bg-white p-4 rounded-lg shadow-md mb-4 hover:shadow-lg transition-shadow duration-300">
-                    <h4 class="text-lg font-bold text-orange-950 mb-2">${
-                        item.buku?.judul || "Judul tidak tersedia"
-                    }</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                        <p class="text-gray-600">
-                            <span class="font-semibold">Tanggal Pinjam:</span><br>
-                            ${formatDate(item.tanggal_pinjam)}
-                        </p>
-                        <p class="text-gray-600">
-                            <span class="font-semibold">Tanggal Kembali:</span><br>
-                            ${formatDate(item.tanggal_kembali)}
-                        </p>
+            .map((item) => {
+                const bookTitle = item.buku
+                    ? item.buku.judul
+                    : item.pinjam && item.pinjam.buku
+                    ? item.pinjam.buku.judul
+                    : "Judul tidak tersedia";
+
+                return `
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                        <h4 class="text-lg font-bold text-orange-950 mb-2">${bookTitle}</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <p class="text-gray-600">
+                                <span class="font-semibold">Tanggal Pinjam:</span><br>
+                                ${formatDate(
+                                    item.tanggal_pinjam ||
+                                        item.pinjam?.tanggal_pinjam
+                                )}
+                            </p>
+                            <p class="text-gray-600">
+                                <span class="font-semibold">Tanggal Kembali:</span><br>
+                                ${formatDate(item.tanggal_kembali)}
+                            </p>
+                        </div>
+                        ${
+                            item.denda
+                                ? `<p class="mt-2 text-red-600 font-semibold">Denda: Rp ${item.denda.toLocaleString(
+                                      "id-ID"
+                                  )}</p>`
+                                : ""
+                        }
                     </div>
-                    ${
-                        item.denda
-                            ? `<p class="mt-2 text-red-600 font-semibold">Denda: Rp ${item.denda.toLocaleString(
-                                  "id-ID"
-                              )}</p>`
-                            : ""
-                    }
-                </div>
-            `
-            )
+                `;
+            })
             .join("");
     }
 
@@ -253,4 +268,60 @@ document.addEventListener("DOMContentLoaded", function () {
     document
         .getElementById("menuHistory")
         .addEventListener("click", loadHistory);
+
+    // Waktu
+    const LAT = -6.2; // Latitude Jakarta
+    const LNG = 106.816666; // Longitude Jakarta
+    let currentTimestamp; // Variabel global untuk menyimpan timestamp awal
+
+    async function fetchTimezoneDBTime() {
+        try {
+            // Ambil API Key yang disuntikkan dari Blade
+            const API_KEY = TIMEZONE_DB_API_KEY;
+
+            const response = await fetch(
+                `https://api.timezonedb.com/v2.1/get-time-zone?key=${API_KEY}&format=json&by=position&lat=${LAT}&lng=${LNG}`
+            );
+            const data = await response.json();
+
+            if (data.status === "OK") {
+                // Simpan timestamp awal
+                currentTimestamp = data.timestamp;
+
+                // Tampilkan waktu awal
+                updateTime();
+
+                // Mulai timer untuk memperbarui waktu setiap detik
+                setInterval(updateTime, 1000);
+            } else {
+                console.error(
+                    "Error fetching time from TimeZoneDB:",
+                    data.message
+                );
+                document.getElementById("time").innerText =
+                    "Failed to load time.";
+            }
+        } catch (error) {
+            console.error("Error fetching time from TimeZoneDB:", error);
+            document.getElementById("time").innerText = "Failed to load time.";
+        }
+    }
+
+    // Fungsi untuk memperbarui waktu berdasarkan timestamp
+    function updateTime() {
+        if (currentTimestamp) {
+            // Tambahkan 1 detik ke timestamp setiap kali fungsi ini dipanggil
+            currentTimestamp++;
+
+            // Konversi timestamp ke waktu lokal
+            const currentTime = new Date(currentTimestamp * 1000);
+            document.getElementById("time").innerText =
+                currentTime.toLocaleString("id-ID", {
+                    hour12: false,
+                });
+        }
+    }
+
+    // Panggil fungsi fetch saat halaman dimuat
+    fetchTimezoneDBTime();
 });
