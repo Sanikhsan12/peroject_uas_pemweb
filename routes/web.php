@@ -35,6 +35,10 @@ Route::middleware(['auth','role:admin'])->group(function(){
 });
 Route::middleware(['auth','role:user'])->group(function(){
     Route::get('user/dashboard',[userController::class,'index'])->name('user.dashboard');
+    Route::get('/search', [userController::class, 'search'])->name('search');
+    Route::get('/history', [userController::class, 'history'])->name('history');
+    Route::get('/book/{id}', [userController::class, 'bookDetails'])->name('book.details');
+    Route::post('logout',[loginController::class,'logout'])->name('logout');
 });
 
 // Routing untuk register
