@@ -16,3 +16,10 @@ framework yang digunakan:
 
 -   php laravel dompdf,socialite
 -   tailwind & bootstraps
+
+fitur tambahan:
+
+-   Login Dengan Google Menggunakan Socialite
+-   Dark Mode (Menggunakan Tailwind CSS)
+-   External Api (World Time)
+-   Export PDF Menggunakan dompdf
