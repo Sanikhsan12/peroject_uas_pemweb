@@ -166,4 +166,11 @@ class loginController extends Controller
     
         return redirect()->route('login')->with('status', 'Password has been reset!');
     }
+
+    // logout
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
 }
