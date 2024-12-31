@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Dark Mode Toggle
     const darkModeBtn = document.getElementById("darkModeToogle");
     darkModeBtn.addEventListener("click", function () {
-        document.body.classList.toggle("dark");
+        document.documentElement.classList.toggle("dark");
         localStorage.theme = document.documentElement.classList.contains("dark")
             ? "dark"
             : "light";
@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check initial theme
     if (localStorage.theme === "dark") {
         document.documentElement.classList.add("dark");
+    } else {
+        document.documentElement.classList.remove("dark");
     }
 
     // Navigation Management
@@ -81,32 +83,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 searchResults.innerHTML = books
                     .map(
                         (book) => `
-                        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <h3 class="text-xl font-bold text-orange-950 mb-2">${
+                        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 dark:bg-orange-950">
+                            <h3 class="text-xl font-bold text-orange-950 mb-2 dark:text-white">${
                                 book.judul
                             }</h3>
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <p class="text-gray-600"><span class="font-semibold">Penulis:</span> ${
+                                    <p class="text-gray-600 dark:text-white"><span class="font-semibold">Penulis:</span> ${
                                         book.penulis
                                     }</p>
-                                    <p class="text-gray-600"><span class="font-semibold">Penerbit:</span> ${
+                                    <p class="text-gray-600 dark:text-white"><span class="font-semibold">Penerbit:</span> ${
                                         book.penerbit
                                     }</p>
-                                    <p class="text-gray-600"><span class="font-semibold">Tahun:</span> ${
+                                    <p class="text-gray-600 dark:text-white"><span class="font-semibold">Tahun:</span> ${
                                         book.tahun
                                     }</p>
                                 </div>
                                 <div>
-                                    <p class="text-gray-600"><span class="font-semibold">ISBN:</span> ${
+                                    <p class="text-gray-600 dark:text-white"><span class="font-semibold">ISBN:</span> ${
                                         book.isbn
                                     }</p>
-                                    <p class="text-gray-600"><span class="font-semibold">Kategori:</span> ${
+                                    <p class="text-gray-600 dark:text-white"><span class="font-semibold">Kategori:</span> ${
                                         book.kategori
                                             ? book.kategori.nama
                                             : "Tidak ada kategori"
                                     }</p>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 dark:text-white">
                                         <span class="font-semibold">Status:</span> 
                                         ${
                                             book.jumlah > 0
@@ -119,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             ${
                                 book.jumlah > 0
                                     ? `<button onclick="borrowBook(${book.id})" 
-                                    class="w-full mt-2 px-4 py-2 bg-orange-950 text-white rounded-lg hover:bg-orange-800 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                    class="w-full mt-2 px-4 py-2 bg-orange-950 text-white rounded-lg hover:bg-orange-800 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-white dark:text-orange-950 dark:hover:bg-orange-100">
                                     Pinjam Buku
                                 </button>`
                                     : '<button disabled class="w-full mt-2 px-4 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed">Tidak Tersedia</button>'
@@ -194,12 +196,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 historyResults.innerHTML = `
                     <div class="space-y-6">
                         <div>
-                            <h3 class="text-xl font-semibold mb-4 text-orange-950">Buku yang Sedang Dipinjam</h3>
+                            <h3 class="text-xl font-semibold mb-4 text-orange-950 dark:text-white">Buku yang Sedang Dipinjam</h3>
                             ${displayHistoryItems(data.borrowed)}
                         </div>
                         
                         <div>
-                            <h3 class="text-xl font-semibold mb-4 text-orange-950">Riwayat Pengembalian</h3>
+                            <h3 class="text-xl font-semibold mb-4 text-orange-950 dark:text-white">Riwayat Pengembalian</h3>
                             ${displayHistoryItems(data.returned)}
                         </div>
                     </div>
@@ -226,17 +228,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     : "Judul tidak tersedia";
 
                 return `
-                    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-                        <h4 class="text-lg font-bold text-orange-950 mb-2">${bookTitle}</h4>
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-4 dark:bg-orange-950">
+                        <h4 class="text-lg font-bold text-orange-950 mb-2 dark:text-white">${bookTitle}</h4>
                         <div class="grid grid-cols-2 gap-4">
-                            <p class="text-gray-600">
+                            <p class="text-gray-600 dark:text-white">
                                 <span class="font-semibold">Tanggal Pinjam:</span><br>
                                 ${formatDate(
                                     item.tanggal_pinjam ||
                                         item.pinjam?.tanggal_pinjam
                                 )}
                             </p>
-                            <p class="text-gray-600">
+                            <p class="text-gray-600 dark:text-white">
                                 <span class="font-semibold">Tanggal Kembali:</span><br>
                                 ${formatDate(item.tanggal_kembali)}
                             </p>

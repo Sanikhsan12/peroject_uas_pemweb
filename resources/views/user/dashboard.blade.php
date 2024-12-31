@@ -5,60 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>User dashboard</title>
-    <!-- menyintukan api key dari env -->
     <script>
         const TIMEZONE_DB_API_KEY = "{{ config('app.timezone_db_api_key') }}";
     </script>
-    <!-- CDN Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- import Tailwind CSS Module -->
-    <style>
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-    </style>
     <script>
     tailwind.config = {
         darkMode: 'class'
     }
     </script>
 </head>
-<body class="dark:bg-gray-900 dark:text-white">
+<body class="dark:bg-gray-900 min-h-screen dark:text-white flex flex-col">
     <!-- navbar -->
-    <nav class="flex bg-orange-950 w-full h-16 justify-between items-center border-b-4 border-black mb-4">
+    <nav class="flex bg-orange-950 w-full h-16 justify-between items-center border-b-4 border-black fixed top-0 left-0 right-0 z-50">
         <div class="flex items-center px-4">
             <button id="sidebarToggle" class="p-2 hover:bg-orange-700 rounded-lg border-2 border-white text-white">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
             </button>
-            <span class="ml-4 text-white">Halo {{ auth()->user()->name }}</span>
+            <span class="ml-4 text-white font-medium">Halo {{ auth()->user()->name }}</span>
         </div>
-        <h1 class="text-xl mr-4 text-white">Aplikasi Perpustakaan</h1>
+        <h1 class="text-xl font-bold mr-4 text-white">Aplikasi Perpustakaan</h1>
     </nav>
 
-    <!-- side bar -->
-    <div class="flex">
-        <aside id="sidebar" class="bg-orange-950 max-h-50 text-white transition-transform duration-300 -translate-x-full">
+    <!-- main container -->
+    <div class="flex flex-1 pt-16">
+        <!-- sidebar -->
+        <aside id="sidebar" class="bg-orange-950 min-h-screen w-64 fixed left-0 top-16 bottom-0 transform -translate-x-full transition-transform duration-300 ease-in-out z-40">
             <div class="p-4">
-                <ul class="space-y-2">
+                <ul class="space-y-4">
                     <li>
-                        <span id="darkModeToogle" class="block p-2 text-white text-center hover:text-orange-700">Mode</span>
+                        <span id="darkModeToogle" class="block p-3 text-white text-center hover:bg-orange-700 rounded-lg cursor-pointer transition duration-200">Mode</span>
                     </li>
                     <li>
-                        <a href="{{ route('user.dashboard') }}" id="menuHome" class="block p-2 text-white text-center hover:text-orange-700">Home</a>
+                        <a href="{{ route('user.dashboard') }}" id="menuHome" class="block p-3 text-white text-center hover:bg-orange-700 rounded-lg transition duration-200">Home</a>
                     </li>
                     <li>
-                        <a href="#" id="menuHistory" class="block p-2 text-white text-center hover:text-orange-700">History Pinjaman</a>
+                        <a href="#" id="menuHistory" class="block p-3 text-white text-center hover:bg-orange-700 rounded-lg transition duration-200">History Pinjaman</a>
                     </li>
                     <li>
-                        <a href="#" id="menuSearch" class="block p-2 text-white text-center hover:text-orange-700">Cari Buku</a>
+                        <a href="#" id="menuSearch" class="block p-3 text-white text-center hover:bg-orange-700 rounded-lg transition duration-200">Cari Buku</a>
                     </li>
                     <li>
                         <form action="{{ route('logout')}}" method="post" class="block">
                             @csrf
-                            <button type="submit" class="w-full text-center pb-2 hover:bg-rose-700 rounded-lg">
-                                logout
+                            <button type="submit" class="w-full p-3 text-white text-center hover:bg-rose-700 rounded-lg transition duration-200">
+                                Logout
                             </button>
                         </form>
                     </li>
@@ -67,14 +60,16 @@
         </aside>
 
         <!-- main content -->
-        <main class="flex-1 p-6 mt-20">
-            <!-- homecontent -->
+        <main class="flex-1 p-6 ml-0 transition-margin duration-300 min-h-[calc(100vh-4rem-3rem)]">
+            <!-- home content -->
             <div id="homeContent" class="content-section">
-                <h1 class="text-4xl font-bold text-center items-center justify-center mt-20">
-                    SELAMAT DATANG DI APLIKASI PERPUSTAKAAN
-                </h1>
-                <div id="world-time" class="flex text-center items-center justify-center ">
-                    <h2 id="time" class="text-center mt-20 font-bold text-6xl">Loading..</h2>
+                <div class="flex flex-col items-center justify-center min-h-[calc(100vh-13rem)]">
+                    <h1 class="text-4xl font-bold text-center mb-10">
+                        SELAMAT DATANG DI APLIKASI PERPUSTAKAAN
+                    </h1>
+                    <div id="world-time" class="text-center">
+                        <h2 id="time" class="text-6xl font-bold">Loading..</h2>
+                    </div>
                 </div>
             </div>
 
@@ -82,14 +77,14 @@
             <div id="searchContent" class="content-section hidden">
                 <div class="max-w-4xl mx-auto">
                     <h2 class="text-2xl font-semibold mb-4">Cari Buku</h2>
-                    <form action="{{ route('export.pdf') }}" method="post" class="flex">
+                    <form action="{{ route('export.pdf') }}" method="post" class="flex items-center mb-6">
                         @csrf
-                        <p class="text-black inline">Export Semua Data Buku Ke PDF</p>
-                        <button class="text-white rounded-lg bg-orange-950 p-2 mb-4 block ml-4">Export To Pdf</button>
+                        <p class="text-black dark:text-white">Export Semua Data Buku Ke PDF</p>
+                        <button class="text-white rounded-lg bg-orange-950 hover:bg-orange-900 px-4 py-2 ml-4 transition duration-200">Export To PDF</button>
                     </form>
                     <div class="flex mb-6">
-                        <input type="text" id="searchInput" class="flex-1 p-2 border rounded-l-lg" placeholder="Cari Buku">
-                        <button id="searchButton" class="bg-[#593C2B] text-white p-2 rounded-r-lg">
+                        <input type="text" id="searchInput" class="flex-1 p-2 border rounded-l-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white" placeholder="Cari Buku">
+                        <button id="searchButton" class="bg-orange-950 hover:bg-orange-900 text-white p-2 rounded-r-lg transition duration-200">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
@@ -101,19 +96,25 @@
                 </div>
             </div>
 
-            <!-- history peminjaman -->
+            <!-- history content -->
             <div id="historyContent" class="content-section hidden">
-                <h2 class="text-2xl font-semibold mb-4 items-center text-center">Riwayat Buku yang Anda Pinjam</h2>
-                <div id="historyResults" class="space-y-4">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Riwayat Buku yang Anda Pinjam</h2>
+                <div id="historyResults" class="space-y-4 max-w-4xl mx-auto">
                     <!-- hasil history -->
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- js -->
+    <!-- footer -->
+    <footer class="bg-orange-950 text-white py-4 mt-auto">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Aplikasi Perpustakaan | Porject Pemrograman Web</p>
+        </div>
+    </footer>
+
     <script>
-        const csrfToken =document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     </script>
     <script src="{{ asset('asset/js/userDashboard.js') }}"></script>
 </body>
