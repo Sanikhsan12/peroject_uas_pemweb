@@ -9,6 +9,7 @@ dengan tema web reservasi buku perpustakaan
 -   152023149 - Hilim Khaidar Nabila [ HilmiKhaidar ]
 -   152023022 - M. Gibran Sangajdi [ gibran-022 ]
 -   152023097 - Farras Abdillah Fauzan [ FarrasAbdillah ]
+-   152023116 - Dimas Khodive Putra Antariksa [ aerdripz ]
 
 ## fitur
 
