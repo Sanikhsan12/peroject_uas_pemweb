@@ -14,5 +14,12 @@ dengan tema web reservasi buku perpustakaan
 
 framework yang digunakan:
 
--   php laravel breeze,dompdf,scialite
+-   php laravel dompdf,socialite
 -   tailwind & bootstraps
+
+fitur tambahan:
+
+-   Login Dengan Google Menggunakan Socialite
+-   Dark Mode (Menggunakan Tailwind CSS)
+-   External Api (Time Zone DB)
+-   Export PDF Menggunakan dompdf
