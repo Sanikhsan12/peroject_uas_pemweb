@@ -31,6 +31,18 @@ Route::get('/callback', [loginController::class, 'handleGoogleCallback']);
 Route::post('/login', [loginController::class, 'login'])->name('login');
 Route::middleware(['auth','role:admin'])->group(function(){
     Route::get('admin/dashboard',[adminController::class,'index'])->name('admin.dashboard');
+    Route::get('/admin/books', [adminController::class, 'getAllBooks']);
+    Route::get('/admin/borrows', [adminController::class, 'getAllBorrows']);
+    Route::get('/admin/returns', [adminController::class, 'getAllReturns']);
+    Route::get('/admin/history', [adminController::class, 'history']);
+    Route::post('/admin/mark-returned/{id}', [adminController::class, 'markAsReturned']);
+    Route::post('/admin/books', [AdminController::class, 'store']);
+    Route::put('/admin/books/{id}', [AdminController::class, 'update']);
+    Route::delete('/admin/books/{id}', [AdminController::class, 'destroy']);
+    Route::post('/admin/export/books', [adminController::class, 'exportBooksPDF'])->name('admin.export.books');
+    Route::post('/admin/export/borrows', [adminController::class, 'exportBorrowsPDF'])->name('admin.export.borrows');
+    Route::post('/admin/export/returns', [adminController::class, 'exportReturnsPDF'])->name('admin.export.returns');
+    Route::post('logout',[loginController::class,'logout'])->name('logout');
 });
 Route::middleware(['auth','role:user'])->group(function(){
     Route::get('user/dashboard',[userController::class,'index'])->name('user.dashboard');
